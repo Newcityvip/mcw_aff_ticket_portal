@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MCW Affiliates Support</title>
+
+  <style>
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      background:#0b1220;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      color:#e5e7eb
+    }
+    .card{
+      max-width:640px;
+      width:92%;
+      background:#111827;
+      border:1px solid #1f2937;
+      border-radius:16px;
+      padding:24px;
+      box-shadow:0 20px 40px rgba(0,0,0,.35)
+    }
+    h1{margin:0 0 10px;font-size:20px}
+    p{margin:6px 0;color:#cbd5e1;line-height:1.7}
+    .muted{font-size:13px;color:#94a3b8}
+    hr{border:0;border-top:1px solid rgba(148,163,184,.35);margin:14px 0}
+    .btn{
+      display:inline-block;
+      margin-top:12px;
+      padding:10px 14px;
+      border-radius:12px;
+      background:#1f2937;
+      border:1px solid #334155;
+      color:#e5e7eb;
+      text-decoration:none;
+      font-size:14px;
+    }
+    .btn:hover{background:#243042}
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h1 id="title">Checking MCW Affiliates support hours…</h1>
+    <p id="msg" class="muted">Please wait.</p>
+  </div>
+
+<script>
+  // ✅ MCW Affiliates Ticket (Bangla)
+  const TICKET_URL =
+    "https://ticket.cxgenie-mcw.com?bid=ec5eb030-4554-4b1a-9c52-a7650c8e8c11&lang=bn";
+
+  // ✅ Office hours (Bangladesh Time): 07:00 – 23:59
+  const OPEN_MIN = 7 * 60;         // 07:00
+  const CLOSE_MIN = 23 * 60 + 59;  // 23:59
+
+  function bdtMinutesNow(){
+    const parts = new Intl.DateTimeFormat("en-US",{
+      timeZone:"Asia/Dhaka",
+      hour12:false,
+      hour:"2-digit",
+      minute:"2-digit"
+    }).formatToParts(new Date());
+
+    const h = Number(parts.find(p=>p.type==="hour").value);
+    const m = Number(parts.find(p=>p.type==="minute").value);
+    return h*60 + m;
+  }
+
+  const title = document.getElementById("title");
+  const msg = document.getElementById("msg");
+
+  const now = bdtMinutesNow();
+  const isOpen = now >= OPEN_MIN && now <= CLOSE_MIN;
+
+  if (isOpen) {
+    title.textContent = "Redirecting to MCW Affiliates ticket form…";
+    msg.innerHTML = `
+      Please wait. If you are not redirected automatically,
+      <a class="btn" href="${TICKET_URL}" rel="noopener noreferrer">
+        Open MCW Affiliates Ticket Form
+      </a>
+    `;
+    setTimeout(() => window.location.href = TICKET_URL, 250);
+  } else {
+    title.textContent = "MCW Affiliates Support is closed now";
+    msg.innerHTML = `
+      <div>
+        <b>Dear MCW Affiliates,</b><br>
+        MCW Affiliates Support is currently closed.<br><br>
+
+        Our support hours are <b>7:00 AM – 12:00 AM (BDT)</b>.<br>
+        Please come back at <b>7:00 AM</b> in the morning to submit your ticket.
+
+        <hr>
+
+        <b>প্রিয় MCW অ্যাফিলিয়েটস,</b><br>
+        এই মুহূর্তে <b>MCW অ্যাফিলিয়েট সাপোর্ট</b> বন্ধ আছে।<br><br>
+
+        আমাদের সাপোর্ট সময় <b>সকাল ৭:০০টা থেকে রাত ১২:০০টা (BDT)</b> পর্যন্ত।<br>
+        অনুগ্রহ করে <b>সকাল ৭:০০টায়</b> আবার এসে আপনার টিকিট সাবমিট করুন।
+      </div>
+    `;
+  }
+</script>
+</body>
+</html>
